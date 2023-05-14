@@ -49,7 +49,7 @@ class MainViewController: UIViewController {
 
         setupNavigationController()
         setupView()
-//        fetchFlights()
+        viewModel.updateState(viewInput: .changeStartCity, startCity: .led)
     }
 
     private func setupNavigationController() {
@@ -57,6 +57,7 @@ class MainViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         navigationController?.navigationBar.backgroundColor = UIColor(named: "wildPink")
+        navigationItem.backButtonTitle = ""
 
     }
 
@@ -64,6 +65,7 @@ class MainViewController: UIViewController {
         view.backgroundColor = UIColor(named: "wildPink")
         self.title = "Пора в путешествие"
         view.addSubview(flightsCollectionView)
+//        flightsCollectionView.addSubview(activityIndicator)
         view.addSubview(activityIndicator)
         NSLayoutConstraint.activate([
             flightsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -90,7 +92,7 @@ class MainViewController: UIViewController {
                 DispatchQueue.main.async {
                     self.flights = flights
                     self.activityIndicator.stopAnimating()
-                    self.flightsCollectionView.reloadData()
+                    self.flightsCollectionView.reloadSections(IndexSet(integer: 1))
                 }
             case .error:
                 // Here we can show alert with error text
@@ -118,9 +120,8 @@ extension MainViewController: UICollectionViewDataSource {
             return cell
         } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FlightsCollectionViewCell.reuseId, for: indexPath) as? FlightsCollectionViewCell else { return FlightsCollectionViewCell() }
-//            cell.clipsToBounds = false
-                        cell.layer.borderWidth = 1
-                        cell.layer.borderColor = UIColor.systemGray5.cgColor
+            cell.layer.borderWidth = 1
+            cell.layer.borderColor = UIColor.systemGray5.cgColor
             cell.layer.shadowColor = UIColor.black.cgColor
             cell.layer.shadowOffset = CGSize(width: 0, height: 4)
             cell.layer.shadowOpacity = 0.25
@@ -151,17 +152,24 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         let height: CGFloat = indexPath.section == 0 ? 62 : 122
         return CGSize(width: width, height: height)
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize {
         CGSize(width: .zero, height: 20)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        let flight = flights[indexPath.row]
+        viewModel.updateState(viewInput: .flightDidSelect(flight), startCity: flight.startLocationCode)
+        let ticketViewController = TicketViewController(flight: flight)
+        navigationController?.pushViewController(ticketViewController, animated: true)
     }
 }
 extension MainViewController: StartCityDelegateProtocol {
     func changeStartCity(_ startCity: StartLocationCode) {
         viewModel.updateState(viewInput: .changeStartCity, startCity: startCity)
+        // FIXME: - mocK
+//        navigationController?.pushViewController(TicketViewController(flight: flightMock), animated: true)
     }
 }
 

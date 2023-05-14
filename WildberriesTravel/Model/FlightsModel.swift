@@ -26,9 +26,6 @@ struct Flight: Codable {
 //    let searchToken: String
 }
 
-//enum EndDate: String, Codable {
-//    case the000101010000000000UTC = "0001-01-01 00:00:00 +0000 UTC"
-//}
 
 // MARK: - Seat
 struct Seat: Codable {
@@ -50,5 +47,7 @@ enum StartLocationCode: String, Codable {
     case led = "LED"
     case aer = "AER"
     case mow = "MOW"
-    case msq = "MSQ"
+    case kzn = "KZN"
 }
+
+let flightMock = Flight(startDate: "2023-10-11", startLocationCode: .mow, endLocationCode: "NYC", startCity: "Москва", endCity: "Нью-Йорк", serviceClass: "ECONOMY", seats: [.init(passengerType: .adt, count: 3), .init(passengerType: .chd, count: 2), .init(passengerType: .inf, count: 1)], price: 9876)

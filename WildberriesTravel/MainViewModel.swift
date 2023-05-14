@@ -42,19 +42,18 @@ final class MainViewModel: MainViewModelProtocol {
     func updateState(viewInput: ViewInput, startCity: StartLocationCode) {
         switch viewInput {
         case .changeStartCity:
-//            state = .loading(startCity: startCity)
-            print("Loading... 🗿")
-            networkService.getFlights(startCity) { flightModel in
-                print(flightModel.flights)
-                self.state = .loaded(flights: flightModel.flights)
+            state = .loading(startCity: startCity)
+//            print("Loading... 🗿")
+            networkService.getFlights(startCity) { [weak self] flightModel in
+//                print(flightModel.flights)
+                sleep(1)
+                self?.state = .loaded(flights: flightModel.flights)
             }
 
             
         case let .flightDidSelect(flight):
-            print(flight)
-//            print("test2")
-//            coordinator?.pushBookViewController(forBook: book)
-//            print(coordinator)
+            print(flight.endCity)
+//            coordinator?.pushTicketViewController(flight: flight)
         }
     }
 

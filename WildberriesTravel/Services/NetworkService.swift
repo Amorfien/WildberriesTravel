@@ -26,11 +26,6 @@ final class NetworkService: NetworkServiceProtocol {
             guard let data else { print("Empty data"); return }
             completion(.success(data))
 
-
-//            if let str = String(data: data, encoding: .utf8) {
-//                print(str)
-//            }
-
         }.resume()
     }
     func getFlights(_ startLocationCode: StartLocationCode, completion: @escaping (FlightsModel) -> ()) {

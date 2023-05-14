@@ -26,7 +26,7 @@ final class StartCityCollectionViewCell: UICollectionViewCell {
     }()
 
     private lazy var citySegmentedControl: UISegmentedControl = {
-        let segment = UISegmentedControl(items: ["СПб", "Москва", "Сочи", "Минск"])
+        let segment = UISegmentedControl(items: ["СПб", "Москва", "Сочи", "Казань"])
         segment.selectedSegmentIndex = 0
         segment.addTarget(self, action: #selector(changeCity), for: .valueChanged)
         segment.translatesAutoresizingMaskIntoConstraints = false
@@ -67,7 +67,7 @@ final class StartCityCollectionViewCell: UICollectionViewCell {
         case 0: startCity = .led
         case 1: startCity = .mow
         case 2: startCity = .aer
-        default: startCity = .msq
+        default: startCity = .kzn
         }
         delegate?.changeStartCity(startCity)
     }
