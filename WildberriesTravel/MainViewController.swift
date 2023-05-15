@@ -49,7 +49,7 @@ class MainViewController: UIViewController {
 
         setupNavigationController()
         setupView()
-        viewModel.updateState(viewInput: .changeStartCity, startCity: .led)
+//        viewModel.updateState(viewInput: .changeStartCity, startCity: .led)
     }
 
     private func setupNavigationController() {
@@ -167,9 +167,9 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
 }
 extension MainViewController: StartCityDelegateProtocol {
     func changeStartCity(_ startCity: StartLocationCode) {
-        viewModel.updateState(viewInput: .changeStartCity, startCity: startCity)
+//        viewModel.updateState(viewInput: .changeStartCity, startCity: startCity)
         // FIXME: - mocK
-//        navigationController?.pushViewController(TicketViewController(flight: flightMock), animated: true)
+        navigationController?.pushViewController(TicketViewController(flight: flightMock), animated: true)
     }
 }
 

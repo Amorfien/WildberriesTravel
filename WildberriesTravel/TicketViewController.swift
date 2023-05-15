@@ -34,9 +34,10 @@ final class TicketViewController: UIViewController {
         let button = UIButton()
         button.setTitle("Оформить заказ", for: .normal)
         button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.systemGray6, for: .highlighted)
         button.backgroundColor = UIColor(named: "orangeButton")
         button.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
-//        button.addTarget(self, action: #selector(orderButtonDidTap), for: .touchUpInside)
+        button.addTarget(self, action: #selector(orderButtonDidTap), for: .touchUpInside)
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.shadowColor = UIColor.black.cgColor
@@ -110,10 +111,12 @@ final class TicketViewController: UIViewController {
 
             orderButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             orderButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            orderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+            orderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             orderButton.heightAnchor.constraint(equalToConstant: 48)
 
         ])
     }
+
+    @objc private func orderButtonDidTap() {}
 
 }

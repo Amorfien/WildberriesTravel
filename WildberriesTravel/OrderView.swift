@@ -9,32 +9,41 @@ import UIKit
 
 final class OrderView: UIView {
 
-    init() {
-        super.init(frame: .zero)
-        setupView()
+    @IBOutlet var xib: OrderView!
+
+
+
+//    init() {
+//        super.init(frame: .zero)
+//        setupNib()
+//        setupView()
+//    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupNib()
+//        setupView()
     }
 
-    @available(*, unavailable)
+
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupNib()
     }
 
-    private func setupView() {
-        backgroundColor = .systemGray4
-        layer.cornerRadius = 10
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOffset = CGSize(width: 0, height: 4)
-        layer.shadowOpacity = 0.5
-        layer.shadowRadius = 4
+    private func setupNib() {
+        let viewFromNib = Bundle.main.loadNibNamed("OrderView", owner: self)?.first as! UIView
+        viewFromNib.frame = self.bounds
+        addSubview(viewFromNib)
         translatesAutoresizingMaskIntoConstraints = false
+        xib.layer.cornerRadius = 10
+        xib.layer.shadowColor = UIColor.black.cgColor
+        xib.layer.shadowOffset = CGSize(width: 0, height: 4)
+        xib.layer.shadowOpacity = 0.5
+        xib.layer.shadowRadius = 4
 
-//        addSubview(loadButton)
-//        addSubview(collectionView)
-//        addSubview(activityIndicator)
 
-        NSLayoutConstraint.activate([
-
-        ])
     }
+
 
 }
