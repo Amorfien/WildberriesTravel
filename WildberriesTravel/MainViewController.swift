@@ -49,8 +49,13 @@ class MainViewController: UIViewController {
 
         setupNavigationController()
         setupView()
-//        viewModel.updateState(viewInput: .changeStartCity, startCity: .led)
+                viewModel.updateState(viewInput: .changeStartCity, startCity: .led)
     }
+
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        flightsCollectionView.reloadSections(IndexSet(integer: 1))
+//    }
 
     private func setupNavigationController() {
 
@@ -134,9 +139,10 @@ extension MainViewController: UICollectionViewDataSource {
             for seat in flight.seats {
                 sumSeats += seat.count
             }
-            cell.fillData(date: date ?? "", price: flight.price,
+            cell.fillData(id: indexPath.row, date: date ?? "", price: flight.price,
                           start: (flight.startLocationCode.rawValue, flight.startCity),
-                          destination: (flight.endLocationCode, flight.endCity), seats: sumSeats)
+                          destination: (flight.endLocationCode, flight.endCity), seats: sumSeats, like: flight.isLike)
+            cell.likeDelegate = self
             return cell
         }
 
@@ -161,15 +167,30 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         collectionView.deselectItem(at: indexPath, animated: true)
         let flight = flights[indexPath.row]
         viewModel.updateState(viewInput: .flightDidSelect(flight), startCity: flight.startLocationCode)
-        let ticketViewController = TicketViewController(flight: flight)
+        let ticketViewController = TicketViewController(flight: flight, id: indexPath.item)
+        ticketViewController.delegate = self
         navigationController?.pushViewController(ticketViewController, animated: true)
     }
 }
 extension MainViewController: StartCityDelegateProtocol {
     func changeStartCity(_ startCity: StartLocationCode) {
-//        viewModel.updateState(viewInput: .changeStartCity, startCity: startCity)
+                viewModel.updateState(viewInput: .changeStartCity, startCity: startCity)
         // FIXME: - mocK
-        navigationController?.pushViewController(TicketViewController(flight: flightMock), animated: true)
+//        navigationController?.pushViewController(TicketViewController(flight: flightMock), animated: true)
     }
 }
-
+/// делегат лайка из ячейки коллекции
+extension MainViewController: LikeDelegateProtocol {
+    func likeTap(id: Int) {
+//        likes[id].toggle()
+        flights[id].isLike.toggle()
+        flightsCollectionView.reloadItems(at: [IndexPath(row: id, section: 1)])
+    }
+}
+extension MainViewController: LikeToMainProtocol {
+    func likeToMain(id: Int) {
+//        likes[id].toggle()
+        flights[id].isLike.toggle()
+        flightsCollectionView.reloadItems(at: [IndexPath(row: id, section: 1)])
+    }
+}

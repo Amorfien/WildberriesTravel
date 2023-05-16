@@ -7,7 +7,20 @@
 
 import UIKit
 
+protocol DetailLikeProtocol: AnyObject {
+    func detailLikeTap(id: Int)
+}
+
 final class TicketView: UIView {
+
+    weak var delegate: DetailLikeProtocol?
+
+    private let id: Int
+    private var like: Bool = false {
+        didSet {
+            likeButton.setImage(UIImage(named: like ? "yesHeart" : "noHeart"), for: .normal)
+        }
+    }
 
     private let stackView = UIStackView()
 
@@ -64,14 +77,16 @@ final class TicketView: UIView {
         button.setImage(UIImage(named: "noHeart"), for: .normal)
 //        button.tintColor = .secondaryLabel
 //        button.contentMode = .scaleAspectFit
-//        button.addTarget(self, action: #selector(pressLike), for: .touchUpInside)
+        button.addTarget(self, action: #selector(pressLike), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
-    init() {
+    init(id: Int) {
+        self.id = id
         super.init(frame: .zero)
         setupView()
+
     }
 
     @available(*, unavailable)
@@ -80,7 +95,7 @@ final class TicketView: UIView {
     }
 
     private func setupView() {
-        backgroundColor = .systemGray5
+        backgroundColor = .systemGray6
         layer.cornerRadius = 10
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOffset = CGSize(width: 0, height: 4)
@@ -117,6 +132,16 @@ final class TicketView: UIView {
             seatsLabel.widthAnchor.constraint(equalToConstant: 70),
             seatsLabel.heightAnchor.constraint(equalToConstant: 24)
         ])
+    }
+
+    func fillData(like: Bool) {
+        self.like = like
+
+    }
+
+    @objc private func pressLike() {
+        self.like.toggle()
+        delegate?.detailLikeTap(id: id)
     }
 
 }

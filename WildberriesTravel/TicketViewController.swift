@@ -7,12 +7,19 @@
 
 import UIKit
 
+protocol LikeToMainProtocol: AnyObject {
+    func likeToMain(id: Int)
+}
+
 final class TicketViewController: UIViewController {
 
+    weak var delegate: LikeToMainProtocol?
+
     private let flight: Flight
+    private let id: Int
 
     private let whiteView = UIView()
-    private let ticketView = TicketView()
+    private let ticketView: TicketView
     private let orderView = OrderView()
 
     private let totalLabel: UILabel = {
@@ -25,7 +32,7 @@ final class TicketViewController: UIViewController {
     private let priceLabel: UILabel = {
         let label = UILabel()
         label.text = "3910₽"
-        label.font = .systemFont(ofSize: 28, weight: .bold)
+        label.font = .systemFont(ofSize: 24, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -47,8 +54,12 @@ final class TicketViewController: UIViewController {
         return button
     }()
 
-    init(flight: Flight) {
+    init(flight: Flight, id: Int) {
         self.flight = flight
+        self.id = id
+        ticketView = TicketView(id: id)//-------------------------
+        ticketView.fillData(like: flight.isLike)
+
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -59,6 +70,7 @@ final class TicketViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        ticketView.delegate = self
         setupNavigationController()
         setupView()
     }
@@ -79,6 +91,8 @@ final class TicketViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = UIColor(named: "wildPink")
         self.title = "\(flight.startCity)  -  \(flight.endCity)"
+        self.priceLabel.text = "\(flight.price)₽"
+        orderView.delegate = self
         view.addSubview(whiteView)
         whiteView.backgroundColor = .systemBackground
         whiteView.translatesAutoresizingMaskIntoConstraints = false
@@ -119,4 +133,17 @@ final class TicketViewController: UIViewController {
 
     @objc private func orderButtonDidTap() {}
 
+}
+
+extension TicketViewController: PriceDelegateProtocol {
+    func changePrice(count: Int, baggage: Bool) {
+        let total = flight.price * count + (baggage ? 1300 : 0)
+        priceLabel.text = "\(total)₽"
+    }
+}
+extension TicketViewController: DetailLikeProtocol {
+    func detailLikeTap(id: Int) {
+//        self.like.toggle()
+        delegate?.likeToMain(id: id)
+    }
 }

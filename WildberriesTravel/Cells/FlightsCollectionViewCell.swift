@@ -7,10 +7,16 @@
 
 import UIKit
 
+protocol LikeDelegateProtocol: AnyObject {
+    func likeTap(id: Int)
+}
+
 final class FlightsCollectionViewCell: UICollectionViewCell {
-//    weak var delegateProgressUpd: HVCProgressUpd?
 
     static let reuseId = "FlightsCollectionViewCell"
+
+    weak var likeDelegate: LikeDelegateProtocol?
+    private var id: Int = 0
 
     private let stackView = UIStackView()
 
@@ -120,16 +126,18 @@ final class FlightsCollectionViewCell: UICollectionViewCell {
         ])
     }
 
-    func fillData(date: String, price: Int, start: (String, String),
-                  destination: (String, String), seats: Int) {
+    func fillData(id: Int, date: String, price: Int, start: (String, String),
+                  destination: (String, String), seats: Int, like: Bool) {
+        self.id = id
         dateLabel.text = date
         priceLabel.text = "\(price)₽"
         cityLabel.text = "\(start.1)  -  \(destination.1)"
         timeLabel.text = "23:45 \(start.0)  -  01:20 \(destination.0)"
         seatsLabel.text = "мест \(seats)"
+        likeButton.setImage(UIImage(named: like ? "yesHeart" : "noHeart"), for: .normal)
     }
 
     @objc private func pressLike() {
-        likeButton.setImage(UIImage(named: "yesHeart"), for: .normal)
+        likeDelegate?.likeTap(id: id)
     }
 }
