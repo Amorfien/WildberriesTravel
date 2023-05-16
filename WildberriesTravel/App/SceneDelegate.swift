@@ -17,7 +17,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window = UIWindow(windowScene: windowScene)
         let mainViewModel = MainViewModel(networkService: NetworkService())
         self.window?.rootViewController = UINavigationController(rootViewController: MainViewController(viewModel: mainViewModel))
-//        self.window?.overrideUserInterfaceStyle = .light    //запрет тёмной темы
         self.window?.makeKeyAndVisible()
     }
 

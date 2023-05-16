@@ -40,25 +40,33 @@ final class TicketViewController: UIViewController {
     private lazy var orderButton: UIButton = {
         let button = UIButton()
         button.setTitle("Оформить заказ", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.setTitleColor(.systemGray6, for: .highlighted)
         button.backgroundColor = UIColor(named: "orangeButton")
+        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.systemGray5, for: .highlighted)
+        button.setBackgroundImage(UIImage(named: "orangePixel"), for: .highlighted)
+        button.clipsToBounds = true
         button.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
         button.addTarget(self, action: #selector(orderButtonDidTap), for: .touchUpInside)
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOffset = CGSize(width: 0, height: 4)
-        button.layer.shadowOpacity = 0.5
-        button.layer.shadowRadius = 4
+        button.layer.borderWidth = 0.5
+        button.layer.borderColor = UIColor.gray.cgColor
+//        button.layer.shadowColor = UIColor.black.cgColor
+//        button.layer.shadowOffset = CGSize(width: 0, height: 4)
+//        button.layer.shadowOpacity = 0.5
+//        button.layer.shadowRadius = 4
         return button
     }()
+
+    // MARK: - Init
 
     init(flight: Flight, id: Int) {
         self.flight = flight
         self.id = id
-        ticketView = TicketView(id: id)//-------------------------
-        ticketView.fillData(like: flight.isLike)
+        ticketView = TicketView(id: id)
+        ticketView.fillData(date: flight.startDate.components(separatedBy: " ").first ?? "N/D", startCity: (flight.startCity, flight.startLocationCode.rawValue), endCity: (flight.endCity, flight.endLocationCode), like: flight.isLike, token: flight.searchToken)
+        orderView.maxCount = (flight.seats[0].count, flight.seats[1].count, flight.seats[2].count)
+        orderView.serviceClass = flight.serviceClass
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -82,6 +90,8 @@ final class TicketViewController: UIViewController {
         super.viewWillDisappear(animated)
         navigationController?.navigationBar.prefersLargeTitles = true
     }
+
+    // MARK: - Private methods
 
     private func setupNavigationController() {
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
@@ -131,9 +141,15 @@ final class TicketViewController: UIViewController {
         ])
     }
 
-    @objc private func orderButtonDidTap() {}
+    @objc private func orderButtonDidTap() {
+        let alert = UIAlertController(title: "Покупка", message: "Успешно", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in self.dismiss(animated: true)}))
+        self.present(alert, animated: true)
+    }
 
 }
+
+// MARK: - Extensions
 
 extension TicketViewController: PriceDelegateProtocol {
     func changePrice(count: Int, baggage: Bool) {

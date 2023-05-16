@@ -35,22 +35,23 @@ final class MainViewModel: MainViewModelProtocol {
 
     private let networkService: NetworkServiceProtocol
 
+    // MARK: - Init
+
     init(networkService: NetworkServiceProtocol) {
         self.networkService = networkService
     }
+
+    // MARK: - Binding method
 
     func updateState(viewInput: ViewInput, startCity: StartLocationCode) {
         switch viewInput {
         case .changeStartCity:
             state = .loading(startCity: startCity)
-//            print("Loading... 🗿")
             networkService.getFlights(startCity) { [weak self] flightModel in
-//                print(flightModel.flights)
+                // sleep для наглядности
                 sleep(1)
                 self?.state = .loaded(flights: flightModel.flights)
             }
-
-            
         case let .flightDidSelect(flight):
             print(flight.endCity)
 //            coordinator?.pushTicketViewController(flight: flight)

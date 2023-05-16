@@ -85,13 +85,11 @@
 				185D46532A0FC67600AFC330 /* Source */,
 				185D46542A0FC84400AFC330 /* Model */,
 				185D46572A0FC93200AFC330 /* Services */,
-				1851C8DD2A115E1C006DA622 /* Cells */,
-				185D46422A0FC61A00AFC330 /* MainViewController.swift */,
 				1851C8DE2A116397006DA622 /* MainViewModel.swift */,
+				185D46422A0FC61A00AFC330 /* MainViewController.swift */,
+				1851C8DD2A115E1C006DA622 /* Cells */,
 				1851C8E02A118A65006DA622 /* TicketViewController.swift */,
-				1851C8E22A1197B3006DA622 /* TicketView.swift */,
-				1851C8E42A119A34006DA622 /* OrderView.swift */,
-				189C66882A124835007096DE /* OrderView.xib */,
+				18754D852A13A3D900E0635D /* Views */,
 			);
 			path = WildberriesTravel;
 			sourceTree = "<group>";
@@ -129,6 +127,16 @@
 				185D46582A0FC96900AFC330 /* NetworkService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		18754D852A13A3D900E0635D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1851C8E22A1197B3006DA622 /* TicketView.swift */,
+				1851C8E42A119A34006DA622 /* OrderView.swift */,
+				189C66882A124835007096DE /* OrderView.xib */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

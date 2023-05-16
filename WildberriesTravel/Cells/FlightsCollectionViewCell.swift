@@ -45,6 +45,8 @@ final class FlightsCollectionViewCell: UICollectionViewCell {
         return label
     }()
 
+    private let returnImageView = UIImageView()
+
     private let priceLabel: UILabel = {
         let label = UILabel()
         label.text = "1560₽"
@@ -57,7 +59,7 @@ final class FlightsCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "мест 2"
         label.textAlignment = .center
-        label.backgroundColor = UIColor(named: "wildRed")//wildGreen
+        label.backgroundColor = UIColor(named: "wildRed")
         label.layer.cornerRadius = 4
         label.clipsToBounds = true
         label.font = .systemFont(ofSize: 12, weight: .regular)
@@ -66,17 +68,15 @@ final class FlightsCollectionViewCell: UICollectionViewCell {
         return label
     }()
 
-
-
     private lazy var likeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "noHeart"), for: .normal)
-//        button.tintColor = .secondaryLabel
-//        button.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(pressLike), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+
+    // MARK: - Init
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -99,10 +99,10 @@ final class FlightsCollectionViewCell: UICollectionViewCell {
         stackView.addArrangedSubview(dateLabel)
         stackView.addArrangedSubview(priceLabel)
         stackView.addArrangedSubview(likeButton)
-//        let stackView = UIStackView(arrangedSubviews: [dateLabel, priceLabel, likeButton])
-//        let flightViews = [dateLabel, cityLabel, timeLabel, priceLabel, seatsLabel, likeButton]
-        let flightViews = [stackView, cityLabel, timeLabel, seatsLabel]
+        returnImageView.translatesAutoresizingMaskIntoConstraints = false
+        let flightViews = [stackView, cityLabel, timeLabel, seatsLabel, returnImageView]
         flightViews.forEach { contentView.addSubview($0) }
+
 
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
@@ -118,6 +118,11 @@ final class FlightsCollectionViewCell: UICollectionViewCell {
             timeLabel.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             timeLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
 
+            returnImageView.leadingAnchor.constraint(equalTo: seatsLabel.leadingAnchor),
+            returnImageView.bottomAnchor.constraint(equalTo: seatsLabel.topAnchor, constant: -16),
+            returnImageView.widthAnchor.constraint(equalToConstant: 30),
+            returnImageView.heightAnchor.constraint(equalToConstant: 30),
+
             seatsLabel.bottomAnchor.constraint(equalTo: timeLabel.bottomAnchor),
             seatsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             seatsLabel.widthAnchor.constraint(equalToConstant: 70),
@@ -126,8 +131,13 @@ final class FlightsCollectionViewCell: UICollectionViewCell {
         ])
     }
 
+    @objc private func pressLike() {
+        likeDelegate?.likeTap(id: id)
+    }
+
+    // MARK: - Public method
     func fillData(id: Int, date: String, price: Int, start: (String, String),
-                  destination: (String, String), seats: Int, like: Bool) {
+                  destination: (String, String), seats: Int, like: Bool, returnTicket: Bool) {
         self.id = id
         dateLabel.text = date
         priceLabel.text = "\(price)₽"
@@ -135,9 +145,8 @@ final class FlightsCollectionViewCell: UICollectionViewCell {
         timeLabel.text = "23:45 \(start.0)  -  01:20 \(destination.0)"
         seatsLabel.text = "мест \(seats)"
         likeButton.setImage(UIImage(named: like ? "yesHeart" : "noHeart"), for: .normal)
+        returnImageView.image = returnTicket ? UIImage(systemName: "arrow.left.arrow.right") : nil
+        seatsLabel.backgroundColor = seats > 1 ? UIColor(named: "wildGreen") : UIColor(named: "wildRed")
     }
 
-    @objc private func pressLike() {
-        likeDelegate?.likeTap(id: id)
-    }
 }

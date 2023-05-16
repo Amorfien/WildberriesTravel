@@ -52,11 +52,7 @@ class MainViewController: UIViewController {
                 viewModel.updateState(viewInput: .changeStartCity, startCity: .led)
     }
 
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        flightsCollectionView.reloadSections(IndexSet(integer: 1))
-//    }
-
+    // MARK: - Private methods
     private func setupNavigationController() {
 
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -92,15 +88,20 @@ class MainViewController: UIViewController {
             case .initial:
                 self.activityIndicator.stopAnimating()
             case .loading:
+                self.flights = []
+                self.flightsCollectionView.reloadSections(IndexSet(integer: 1))
                 self.activityIndicator.startAnimating()
             case let .loaded(flights):
                 DispatchQueue.main.async {
                     self.flights = flights
                     self.activityIndicator.stopAnimating()
                     self.flightsCollectionView.reloadSections(IndexSet(integer: 1))
+                    self.flightsCollectionView.isHidden = false
                 }
             case .error:
-                // Here we can show alert with error text
+                self.activityIndicator.startAnimating()
+                let alert = UIAlertController(title: "Ошибка", message: "Произошло страшное!", preferredStyle: .alert)
+                self.present(alert, animated: true)
                 ()
             }
         }
@@ -108,6 +109,9 @@ class MainViewController: UIViewController {
 
 
 }
+
+// MARK: - Extensions
+
 extension MainViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         2
@@ -115,7 +119,6 @@ extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return section == 0 ? 1 : flights.count
     }
-
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
@@ -135,21 +138,21 @@ extension MainViewController: UICollectionViewDataSource {
             let flight = flights[indexPath.row]
             let fullDate = flight.startDate
             let date = fullDate.components(separatedBy: " ").first
+            let returnTicket = flight.endDate != "0001-01-01 00:00:00 +0000 UTC"
             var sumSeats = 0
             for seat in flight.seats {
                 sumSeats += seat.count
             }
             cell.fillData(id: indexPath.row, date: date ?? "", price: flight.price,
                           start: (flight.startLocationCode.rawValue, flight.startCity),
-                          destination: (flight.endLocationCode, flight.endCity), seats: sumSeats, like: flight.isLike)
+                          destination: (flight.endLocationCode, flight.endCity), seats: sumSeats, like: flight.isLike, returnTicket: returnTicket)
             cell.likeDelegate = self
             return cell
         }
-
     }
 
-
 }
+
 extension MainViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
@@ -172,24 +175,21 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         navigationController?.pushViewController(ticketViewController, animated: true)
     }
 }
+
 extension MainViewController: StartCityDelegateProtocol {
     func changeStartCity(_ startCity: StartLocationCode) {
-                viewModel.updateState(viewInput: .changeStartCity, startCity: startCity)
-        // FIXME: - mocK
-//        navigationController?.pushViewController(TicketViewController(flight: flightMock), animated: true)
+        viewModel.updateState(viewInput: .changeStartCity, startCity: startCity)
     }
 }
 /// делегат лайка из ячейки коллекции
 extension MainViewController: LikeDelegateProtocol {
     func likeTap(id: Int) {
-//        likes[id].toggle()
         flights[id].isLike.toggle()
         flightsCollectionView.reloadItems(at: [IndexPath(row: id, section: 1)])
     }
 }
 extension MainViewController: LikeToMainProtocol {
     func likeToMain(id: Int) {
-//        likes[id].toggle()
         flights[id].isLike.toggle()
         flightsCollectionView.reloadItems(at: [IndexPath(row: id, section: 1)])
     }

@@ -263,23 +263,23 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="NO9-Ga-exb">
-                            <rect key="frame" x="0.0" y="40.333333333333314" width="110" height="15.666666666666664"/>
+                            <rect key="frame" x="0.0" y="40.333333333333314" width="130" height="15.666666666666664"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Тариф:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vXW-Fd-Alq">
-                                    <rect key="frame" x="0.0" y="0.0" width="45.666666666666664" height="15.666666666666666"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="65.666666666666671" height="15.666666666666666"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Эконом" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TgN-IX-Vlm">
-                                    <rect key="frame" x="60.666666666666671" y="0.0" width="49.333333333333329" height="15.666666666666666"/>
+                                    <rect key="frame" x="80.666666666666671" y="0.0" width="49.333333333333329" height="15.666666666666666"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
                             <constraints>
-                                <constraint firstAttribute="width" constant="110" id="Vb7-kA-Iez"/>
+                                <constraint firstAttribute="width" constant="130" id="Vb7-kA-Iez"/>
                             </constraints>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" spacing="19" translatesAutoresizingMaskIntoConstraints="NO" id="DOs-0c-4et">

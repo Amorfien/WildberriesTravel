@@ -33,6 +33,7 @@ final class StartCityCollectionViewCell: UICollectionViewCell {
         return segment
     }()
 
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -46,18 +47,15 @@ final class StartCityCollectionViewCell: UICollectionViewCell {
     // MARK: - Private methods
 
     private func setupView() {
-
         contentView.addSubview(cityLabel)
         contentView.addSubview(citySegmentedControl)
 
         NSLayoutConstraint.activate([
             cityLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             cityLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-
             citySegmentedControl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             citySegmentedControl.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            citySegmentedControl.topAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 10),
-
+            citySegmentedControl.topAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 10)
         ])
     }
 

@@ -15,15 +15,21 @@ final class OrderView: UIView {
 
     weak var delegate: PriceDelegateProtocol?
 
-    @IBOutlet var xib: OrderView!
-    @IBOutlet weak var countStack: UIStackView!
+    @IBOutlet private var xib: OrderView!
+    @IBOutlet weak private var countStack: UIStackView!
 
-    @IBOutlet weak var adtLabel: UILabel!
-    @IBOutlet weak var chdLabel: UILabel!
-    @IBOutlet weak var infLabel: UILabel!
+    @IBOutlet weak private var adtLabel: UILabel!
+    @IBOutlet weak private var chdLabel: UILabel!
+    @IBOutlet weak private var infLabel: UILabel!
 
-    @IBOutlet weak var rateLabel: UILabel!
+    @IBOutlet weak private var rateLabel: UILabel!
 
+    var serviceClass = "" {
+        didSet {
+            rateLabel.text = serviceClass.lowercased().capitalized
+        }
+    }
+    var maxCount = (0, 0, 0)
     private var seats = (1, 0, 0) {
         didSet {
             adtLabel.text = String(seats.0)
@@ -32,8 +38,9 @@ final class OrderView: UIView {
             delegate?.changePrice(count: seats.0 + seats.1 + seats.2, baggage: baggageSwitch.isOn)
         }
     }
-    @IBOutlet weak var baggageSwitch: UISwitch!
+    @IBOutlet weak private var baggageSwitch: UISwitch!
 
+    // MARK: - Init
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -44,40 +51,40 @@ final class OrderView: UIView {
         setupNib()
     }
 
-    @IBAction func adtPlusButton(_ sender: UIButton) {
-        if seats.0 < 9 {
+    // MARK: - Private methods
+
+    @IBAction private func adtPlusButton(_ sender: UIButton) {
+        if seats.0 < maxCount.0 {
             seats.0 += 1
         }
     }
-    @IBAction func adtMinusButton(_ sender: UIButton) {
+    @IBAction private func adtMinusButton(_ sender: UIButton) {
         if seats.0 > 0 {
             seats.0 -= 1
         }
     }
-
-    @IBAction func chdPlusButton(_ sender: UIButton) {
-        if seats.1 < 9 {
+    @IBAction private func chdPlusButton(_ sender: UIButton) {
+        if seats.1 < maxCount.1 {
             seats.1 += 1
         }
     }
-    @IBAction func chdMinusButton(_ sender: UIButton) {
+    @IBAction private func chdMinusButton(_ sender: UIButton) {
         if seats.1 > 0 {
-            seats.0 -= 1
+            seats.1 -= 1
         }
     }
-
-    @IBAction func infPlusButton(_ sender: UIButton) {
-        if seats.2 < 9 {
+    @IBAction private func infPlusButton(_ sender: UIButton) {
+        if seats.2 < maxCount.2 {
             seats.2 += 1
         }
     }
-    @IBAction func infMinusButton(_ sender: UIButton) {
+    @IBAction private func infMinusButton(_ sender: UIButton) {
         if seats.2 > 0 {
-            seats.0 -= 1
+            seats.2 -= 1
         }
     }
 
-    @IBAction func switchTap(_ sender: UISwitch) {
+    @IBAction private func switchTap(_ sender: UISwitch) {
         delegate?.changePrice(count: seats.0 + seats.1 + seats.2, baggage: baggageSwitch.isOn)
     }
 
